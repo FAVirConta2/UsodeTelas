@@ -1,0 +1,81 @@
+// Script para o site "Cuidado com as Telas"
+
+// Espera o DOM carregar completamente
+document.addEventListener('DOMContentLoaded', function() {
+    // ===== Scroll suave para links internos =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                // Calcular a posição de destino com um pequeno offset para a navegação fixa
+                const navHeight = document.querySelector('nav').offsetHeight;
+                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // ===== Tratamento do formulário de contato =====
+    const contatoForm = document.getElementById('contato-form');
+    
+    if (contatoForm) {
+        contatoForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Capturar os dados do formulário
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const mensagem = document.getElementById('mensagem').value;
+            
+            // Aqui você poderia enviar os dados para um servidor
+            // Por enquanto, apenas exibimos um alerta
+            alert('Mensagem enviada!');
+            
+            // Limpar o formulário
+            contatoForm.reset();
+        });
+    }
+    
+    // ===== Lightbox para a galeria de imagens =====
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeLightbox = document.querySelector('.close-lightbox');
+    const galleryImages = document.querySelectorAll('.lightbox-img');
+    
+    // Abrir o lightbox ao clicar em uma imagem da galeria
+    galleryImages.forEach(img => {
+        img.addEventListener('click', function() {
+            lightbox.style.display = 'block';
+            lightboxImg.src = this.src;
+        });
+    });
+    
+    // Fechar o lightbox ao clicar no X
+    if (closeLightbox) {
+        closeLightbox.addEventListener('click', function() {
+            lightbox.style.display = 'none';
+        });
+    }
+    
+    // Fechar o lightbox ao clicar fora da imagem
+    lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+            lightbox.style.display = 'none';
+        }
+    });
+    
+    // Fechar o lightbox com a tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && lightbox.style.display === 'block') {
+            lightbox.style.display = 'none';
+        }
+    });
+});
